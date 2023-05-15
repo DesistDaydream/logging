@@ -7,6 +7,7 @@ import (
 	"runtime"
 
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/pflag"
 )
 
 // Logrus 日志相关命令行标志
@@ -16,6 +17,15 @@ type LogrusFlags struct {
 	LogFormat string
 	LogCaller bool
 	LogColors bool
+}
+
+// 添加命令行标志
+func AddFlags(flags *LogrusFlags) {
+	pflag.StringVar(&flags.LogLevel, "log-level", "info", "日志级别:[debug, info, warn, error, fatal]")
+	pflag.StringVar(&flags.LogOutput, "log-output", "", "日志输出位置，不填默认标准输出 stdout")
+	pflag.StringVar(&flags.LogFormat, "log-format", "text", "日志输出格式: [text, json]")
+	pflag.BoolVar(&flags.LogCaller, "log-caller", false, "是否输出调用者信息，包括函数名、文件名、行号等")
+	pflag.BoolVar(&flags.LogColors, "log-colors", false, "是否关闭颜色输出。对于 text 格式，该标志还会影响输出格式")
 }
 
 // LogrusInit 日志功能初始化，若指定了 log-output 命令行标志，则将日志写入到文件中
