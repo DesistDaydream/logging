@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"path/filepath"
 	"runtime"
 
 	"github.com/sirupsen/logrus"
@@ -63,6 +64,9 @@ func LogrusInit(logFlags *LogrusFlags) error {
 	logrus.SetLevel(logLevel)
 
 	if logFlags.LogOutput != "" {
+		if err := os.MkdirAll(filepath.Dir(logFlags.LogOutput), 0755); err != nil {
+			return err
+		}
 		f, err := os.OpenFile(logFlags.LogOutput, os.O_WRONLY|os.O_CREATE, 0755)
 		if err != nil {
 			return err
